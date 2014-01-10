@@ -34,8 +34,33 @@ int main(int argc,char *argv[])
                 badPattern=TRUE;
 
           if(badPattern){
-            printf("Bad pattern character: 
+            printf("Bad pattern character:%c\n",pat[j-1]);
+            continue;
+          }
+
+          snprintf(popenCmd,PCMD_BUF_SIZE,POPEN_FMT,pat);
+          popenCmd[PCMD_BUF_SIZE-1]='\0';
+
+          fp=popen(popenCmd,"r");
+          if(fp==NULL){
+            printf("popen() failed\n");
+            continue;
+          }  
+ 
+          fileCnt=0;
+          while(fgets(pathname,PATH_MAX,fp)!=NULL){
+               printf("%s",pathname);
+               fileCnt++;
+          }
+ 
+          status=pclose(fp);
+          printf(" %d matching file%s\n",fileCnt,(fileCnt!=1)?"s":"");
+          printf(" pclose() status=%#x\n",(unsigned int)status);
+          if(status!=-1)
+             printWaitStatus("\t",status);
+         
    
        } 
       
+       exit(EXIT_SUCCESS);
 }
