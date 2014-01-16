@@ -9,8 +9,8 @@ int main(int argc,char *argv[])
 {
 
         int outputFd;
-        char buffer[MAX_READ];
-
+        char buffer[MAX_READ+1];
+        ssize_t  numRead=0;
 
 	if(argc !=2 || strcmp(argv[1],"--help")==0)
           usageErr("%s outputfile",argv[0]);
@@ -19,12 +19,23 @@ int main(int argc,char *argv[])
          if(outputFd==-1)
             errExit("open");
          
-         printf("Enter the input:\");
-         if(read(STDIN_FILENO,buffer,MAX_READ)==-1)
-      
-                 
+        
+         
+         while((numRead=read(STDIN_FILENO,buffer,MAX_READ))>0){
+       
+         
+        
+        if(write(STDOUT_FILENO,buffer,numRead)!=numRead)
+          errExit("write error 1");
 
+          
+        if(write(outputFd,buffer,numRead)!=numRead)
+          errExit("write error 2");
+        }
 
+        if(close(outputFd)==-1)
+              errExit("close error");  
+              
         
          exit(EXIT_SUCCESS);
 
