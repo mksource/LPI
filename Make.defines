@@ -1,0 +1,13 @@
+#
+#
+#Make Definitions
+#
+CC=gcc
+CFLAGS=-I ../include -g -Wall
+LIBS= ../liblpi.a -lpthread
+LIBLPI_NAME= ../liblpi.a
+
+LIB_OBJS=error_functions.o signal_functions.o curr_time.o print_wait_status.o get_num.o ugid_functions.o
+
+CLEANFILES= core core.* *.core *.o temp.* *.out 
+

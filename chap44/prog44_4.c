@@ -29,7 +29,7 @@ int main(int argc,char *argv[])
            if(pat[len-1]=='\n')
              pat[len-1]='\0';
 
-          for(j=0,badPattern=FALSE;j<len && !=badPattern;j++)
+          for(j=0,badPattern=FALSE;j<len && !badPattern;j++)
              if(!isalnum((unsigned char)pat[j]) && strchr("_*?[^-].",pat[j])==NULL)
                 badPattern=TRUE;
 

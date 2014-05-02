@@ -1,0 +1,45 @@
+	.file	"prog06_06.c"
+	.section	.rodata.str1.4,"aMS",@progbits,1
+	.align 4
+.LC0:
+	.string	"Inside doJump():nvar=%d rvar=%d vvar=%d"
+	.align 4
+.LC1:
+	.string	"After longjmp():nvar=%d rvar=%d vvar=%d\n"
+	.text
+.globl main
+	.type	main, @function
+main:
+	pushl	%ebp
+	movl	%esp, %ebp
+	andl	$-16, %esp
+	subl	$32, %esp
+	movl	$333, 28(%esp)
+	movl	$env, (%esp)
+	call	_setjmp
+	testl	%eax, %eax
+	jne	.L2
+	movl	$999, 28(%esp)
+	movl	28(%esp), %eax
+	movl	%eax, 12(%esp)
+	movl	$888, 8(%esp)
+	movl	$777, 4(%esp)
+	movl	$.LC0, (%esp)
+	call	printf
+	movl	$1, 4(%esp)
+	movl	$env, (%esp)
+	call	longjmp
+.L2:
+	movl	28(%esp), %eax
+	movl	%eax, 12(%esp)
+	movl	$222, 8(%esp)
+	movl	$111, 4(%esp)
+	movl	$.LC1, (%esp)
+	call	printf
+	movl	$0, (%esp)
+	call	exit
+	.size	main, .-main
+	.local	env
+	.comm	env,156,32
+	.ident	"GCC: (GNU) 4.4.7 20120313 (Red Hat 4.4.7-4)"
+	.section	.note.GNU-stack,"",@progbits
